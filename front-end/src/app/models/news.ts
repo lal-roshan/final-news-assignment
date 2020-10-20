@@ -8,4 +8,7 @@ export class News {
     publishedAt: string;
     url: string;
     urlToImage: string;
+    source:{
+        name:string;
+    }
 }

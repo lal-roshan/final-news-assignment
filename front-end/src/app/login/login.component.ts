@@ -34,7 +34,7 @@ export class LoginComponent {
   /// Method invoked on submit button click where user is validated and
   /// decision is taken whether or not to allow further navigation
   loginSubmit() {
-
+    
     this.submitMessage = '';
 
     /// Disabling the whole form when clicking submit button

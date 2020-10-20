@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -23,6 +24,7 @@ import { NewsStoriesComponent } from './news-stories/news-stories.component';
 import { NewsStoryCardComponent } from './news-story-card/news-story-card.component';
 import { NewsReaderComponent } from './news-reader/news-reader.component';
 import { NewsReaderCardComponent } from './news-reader-card/news-reader-card.component';
+import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component';
 
 import { AuthenticationService } from './services/authentication.service';
 import { RouteService } from './services/route.service';
@@ -42,6 +44,7 @@ import { UserService } from './services/user.service';
     NewsReaderComponent,
     NewsReaderCardComponent,
     FooterComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,7 @@ import { UserService } from './services/user.service';
     MatButtonModule,
     MatCardModule,
     MatSnackBarModule,
+    MatDialogModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -63,6 +67,9 @@ import { UserService } from './services/user.service';
     RouteService,
     UserService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[
+    ConfirmationDialogComponent,
+  ]
 })
 export class AppModule { }
