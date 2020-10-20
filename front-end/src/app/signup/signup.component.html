@@ -1,0 +1,39 @@
+<div class="signup-c-form-wrapper px-5 pt-5 pb-3">
+  <h3 class="mb-4">Sign Up</h3>
+  <form class="">
+    <fieldset id="signupForm" class=" d-flex flex-column">
+      <mat-form-field>
+        <input matInput type="text" [formControl]="username" placeholder="Username" class="username">
+      </mat-form-field>
+      <small class="mt-1 mb-3 text-danger font-italic">
+        {{getUserNameErrorMessage()}}
+      </small>
+      <mat-form-field>
+        <input matInput type="text" [formControl]="firstname" placeholder="First Name" class="firstname">
+      </mat-form-field>
+      <small class="mt-1 mb-3 text-danger font-italic">
+        {{getFirstNameErrorMessage()}}
+      </small>
+      <mat-form-field class="mb-3">
+        <input matInput type="text" [formControl]="lastname" placeholder="Last Name" class="lastname">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="email" [formControl]="email" placeholder="Email" class="email">
+      </mat-form-field>
+      <small class="mt-1 mb-3 text-danger font-italic">
+        {{getEmailErrorMessage()}}
+      </small>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type="text" [formControl]="password" placeholder="Password" class="password">
+      </mat-form-field>
+      <small class="mt-1 mb-3 text-danger font-italic">
+        {{getPasswordErrorMessage()}}
+      </small>
+      <button [disabled]="!isSignupFormValid()" mat-button type="submit" class="mt-4"
+        (click)="signupSubmit()">Submit</button>
+    </fieldset>
+  </form>
+  <a class="d-flex flex-row-reverse mt-3 small" routerLink="/login" title="Login">Already registered? Login</a>
+  <strong *ngIf="submitMessage" class="error-message my-2">{{submitMessage}}</strong>
+</div>

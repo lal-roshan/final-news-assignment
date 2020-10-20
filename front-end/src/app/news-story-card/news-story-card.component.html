@@ -1,0 +1,43 @@
+<!-- <mat-card>
+    <mat-card-content>
+    
+    </mat-card-content>
+    <mat-error class="small text-wrap"></mat-error>
+    <small></small>
+    <mat-card-actions>   
+        
+    </mat-card-actions>
+</mat-card> -->
+
+<mat-card class="py-4 my-1">
+    <mat-card-header>
+        <mat-card-title class="ml-0">
+            {{newsItem.title}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{newsItem.publishedAt | date:'medium'}}
+        </mat-card-subtitle>
+    </mat-card-header>
+    <img class="d-flex mx-auto mb-4" mat-card-image src={{newsItem.urlToImage}} />
+    <hr />
+    <mat-card-content class="m-3">
+        <p class="author mb-0">{{newsItem.author}}</p>
+        <p class="font-italic text-muted source" *ngIf="newsItem.source != null && newsItem.source.name != null">Source:
+            {{newsItem.source.name}}</p>
+        <h6 class="description my-3">{{newsItem.description}}</h6>
+    </mat-card-content>
+    <mat-card-actions class="d-flex justify-content-end m-3 mt-4">
+        <button [disabled]="confirmationMessage !== ''" mat-raised-button class="read-later" (click)="addNewsToReadLater(newsItem)">Read Later</button>
+    </mat-card-actions>
+    <div *ngIf="confirmationMessage !== ''" class="d-flex justify-content-end mt-4 align-items-center m-3">
+        <span class="material-icons mr-2 text-success">check_circle</span>
+        <small>
+            {{confirmationMessage}}
+        </small>
+    </div>
+    <div *ngIf="errorMessage !== ''" class="d-flex justify-content-end mt-4 align-items-center m-3">
+        <mat-error class="small text-wrap">
+            {{errorMessage}}
+        </mat-error>
+    </div>
+</mat-card>

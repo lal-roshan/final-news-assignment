@@ -1,0 +1,27 @@
+/* define style rules for header component elements */
+.header{
+    background: whitesmoke;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+#logo{
+    max-width:100%;
+    height: 40px;
+}
+
+.vl{
+    border-left: 2px solid black;
+}
+
+.dropdown-menu{
+    background: whitesmoke;
+    width: fit-content;
+}
+
+.active>.nav-link{
+    color: #cc3d05 !important;
+}
+
+.hide{
+    display: none !important;
+}

@@ -1,0 +1,16 @@
+footer{
+    background: whitesmoke;
+    box-shadow: 0 -3px 6px rgba(0,0,0,0.16), 0 -3px 6px rgba(0,0,0,0.23);
+    font-size: small;
+}
+
+.social a{
+    color:#f47541;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: x-large;
+}
+
+.social a:hover{
+    color: #cc3d05;
+}

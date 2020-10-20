@@ -1,0 +1,52 @@
+mat-card{
+    background: whitesmoke;
+}
+
+mat-card-title{
+    font-size: x-large !important;
+}
+
+img{
+    padding: 2px;
+    height: auto;
+    width: 100%;
+    border: 2px solid gainsboro;
+}
+
+/* For avoiding stretching out of images in large screens */
+@media only screen and (min-width: 991px){
+    img{
+        max-width: 45vw;
+        max-height: 50vh;;
+    }
+}
+
+.author{
+    font-weight: normal !important;
+}
+
+.description{
+    font-weight: lighter;
+}
+
+.description::first-letter{
+    font-size: x-large;
+    font-weight: 400;
+}
+
+.delete-btn{
+    background: whitesmoke;
+    color: #f47541;
+}
+
+.delete-btn:hover{
+    color: #cc3d05;
+}
+
+.source{
+    font-size: smaller;
+}
+
+.news-url{
+    font-size: small;
+}

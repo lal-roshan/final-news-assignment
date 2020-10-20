@@ -1,0 +1,17 @@
+<!-- Show the news in the list in cards for each news -->
+<div *ngIf="newsList.length > 0;else elseBlock" class="w-100">
+  <h3 class="m-2 my-4"><u>Bookmarked News</u></h3>
+  <div *ngFor="let newsItem of newsList" class="m-2 my-4">
+    <app-news-reader-card [newsItem]="newsItem"></app-news-reader-card>
+  </div>
+</div>
+<!-- If there are no news available show the following section -->
+<ng-template #elseBlock>
+  <div class="noNews d-flex flex-column">
+    <span class="fa-stack fa-3x m-auto">
+      <i class="far fa-newspaper fa-stack-1x"></i>
+      <i class="far fa-ban fa-stack-2x"></i>
+    </span>
+    <h5 class="m-auto">No News Available!!</h5>
+  </div>
+</ng-template>

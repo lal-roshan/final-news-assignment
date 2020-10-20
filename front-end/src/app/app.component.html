@@ -1,0 +1,11 @@
+<!-- the app-component should load header, and footer components -->
+<!-- the component should also provide outlet for routing dashboard and login components-->
+<div class="Contents">
+    <app-header [title]="title"></app-header>
+    
+    <div class="newsContent my-3  mx-auto">
+        <router-outlet></router-outlet>
+    </div>
+    
+    <app-footer></app-footer>
+</div>

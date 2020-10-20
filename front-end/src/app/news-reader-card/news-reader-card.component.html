@@ -1,0 +1,28 @@
+
+  <mat-card class="py-4 my-1">
+    <mat-card-header>
+      <mat-card-title class="ml-0">
+        {{newsItem.title}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{newsItem.publishedAt | date:'medium'}}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <!-- <div class="news-image d-flex mx-auto mb-4 mt-3 justify-content-center">
+      <img mat-card-image src={{newsItem.urlToImage}} />
+    </div> -->
+    <img class="d-flex mx-auto mb-4" mat-card-image src={{newsItem.urlToImage}} />
+    <hr />
+    <mat-card-content class="m-3 news-description">
+      <p class="author mb-0">{{newsItem.author}}</p>
+      <p class="font-italic text-muted source" *ngIf="newsItem.source != null && newsItem.source.name != null">Source:
+        {{newsItem.source.name}}</p>
+      <h6 class="description my-3">{{newsItem.description}}</h6>
+    </mat-card-content>
+    <div class="d-flex justify-content-between align-items-center m-3 mt-4 news-url">
+      <a target="_blank" href="{{newsItem.url}}">Click to Read More</a>
+      <button class="delete-btn" mat-icon-button title="Delete" (click)="deleteNews()">
+        <mat-icon>delete</mat-icon>
+      </button> 
+    </div>
+  </mat-card>

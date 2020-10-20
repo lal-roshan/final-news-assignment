@@ -1,0 +1,33 @@
+/* define style rules for login component elements */
+.login-c-form-wrapper{
+    background: whitesmoke;
+    box-shadow: 0 0 8px 0px #00000073;
+    border-radius: 1%;
+}
+
+mat-form-field{
+    min-width: 25vw;
+}
+
+button{
+    background: #f47541;
+    width: fit-content;
+    align-self: flex-end;
+
+}
+
+button:disabled, button:disabled:hover{
+    background: gainsboro;
+    color: slategrey !important;
+}
+
+button:hover{
+    background: #cc3d05;
+    color:whitesmoke;
+}
+
+.error-message{
+    font-size: small;
+    font-weight: normal;
+    color:red;
+}
