@@ -34,7 +34,7 @@ export class AuthenticationService {
 
   /// Checks whether the user token is valid or not
   isUserAuthenticated(token:string){
-    return this.httpClient.post(this.authenticationUrl + 'isAuthenticated', {},{
+    return this.httpClient.get(this.authenticationUrl + 'isAuthenticated',{
       headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
     }).toPromise();
   }

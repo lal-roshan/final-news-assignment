@@ -97,21 +97,36 @@ namespace Test.ControllerTests.IntegrationTest
         }
 
         [Fact, TestPriority(4)]
-        public async Task PostShouldReturnUnauthorized()
+        public async Task DeleteShouldReturnSuccess()
         {
-            UserProfile user = new UserProfile { UserId = "John", FirstName = "Johnson", LastName = "dsouza", Contact = "9812345670", Email = "jogn@gmail.com", CreatedAt = DateTime.Now };
-            MediaTypeFormatter formatter = new JsonMediaTypeFormatter();
+            string userId = "Jack";
 
             // The endpoint or route of the controller action.
-            var httpResponse = await _client.PostAsync("/api/user", user, formatter);
+            var httpResponse = await _client.DeleteAsync($"/api/user?userId={userId}");
+
+            // Must be successful.
+            httpResponse.EnsureSuccessStatusCode();
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
-            Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
-            Assert.Equal($"Your credentials doesn't match User Profile", stringResponse);
+            Assert.True(Convert.ToBoolean(stringResponse));
         }
 
         [Fact, TestPriority(5)]
+        public async Task DeleteShouldReturnNotFound()
+        {
+            string userId = "Jack";
+
+            // The endpoint or route of the controller action.
+            var httpResponse = await _client.DeleteAsync($"/api/user?userId={userId}");
+
+            // Deserialize and examine results.
+            var stringResponse = await httpResponse.Content.ReadAsStringAsync();
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+            Assert.Equal($"This user id doesn't exist", stringResponse);
+        }
+
+        [Fact, TestPriority(6)]
         public async Task UpdateUserShouldReturnUnAuthorized()
         {
             UserProfile user = new UserProfile { UserId = "Sam", FirstName = "Sam", LastName = "Methews", Contact = "9812345677", Email = "sam@gmail.com", CreatedAt = DateTime.Now };

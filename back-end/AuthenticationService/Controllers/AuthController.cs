@@ -25,6 +25,9 @@ namespace AuthenticationService.Controllers
         /// </summary>
         readonly IAuthService authService;
 
+        /// <summary>
+        /// readonly property for values related to JWT authentication
+        /// </summary>
         private IOptions<JWT> jwtSettings;
 
         /// <summary>
@@ -183,22 +186,12 @@ namespace AuthenticationService.Controllers
         }
 
         /// <summary>
-        /// Http post method for checking whether the token is authenticated or not
+        /// Http get method for checking whether the token is authenticated or not
         /// </summary>
-        /// <remarks>
-        /// Sample Request:
-        /// 
-        /// POST/ isAuthenticated
-        /// {
-        ///     "token" : "string"
-        /// }
-        /// 
-        /// </remarks>
-        /// <param name="token">The token of user to be authenticated</param>
         /// <response code="200">If token is authenticated</response>
         /// <response code="500">If token is not authenticated</response>
         /// <returns></returns>
-        [HttpPost("isAuthenticated")]
+        [HttpGet("isAuthenticated")]
         [ActionName("Post")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

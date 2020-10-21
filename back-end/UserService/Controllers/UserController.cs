@@ -39,21 +39,21 @@ namespace UserService.Controllers
         /// <response code="500">If some error occurs</response>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(string userId)
+        public async Task<IActionResult> Get()
         {
             try
             {
-                //var userId = User.Claims.FirstOrDefault(c => string.Equals(c.Type, "userId"));
-                //if (userId != null)
-                //{
-                return Ok(await userService.GetUser(userId));
-                //}
-                //return Unauthorized();
+                var userId = User.Claims.FirstOrDefault(c => string.Equals(c.Type, "userId"));
+                if (userId != null)
+                {
+                    return Ok(await userService.GetUser(userId.Value));
+                }
+                return Unauthorized();
             }
             catch (UserNotFoundException ex)
             {
@@ -70,26 +70,19 @@ namespace UserService.Controllers
         /// </summary>
         /// <param name="user">The details of the user to be added</param>
         /// <response code="201">If user was added successfully</response>
-        /// <response code="401">If unauthorized to perform</response>
         /// <response code="409">If user was already present</response>
         /// <response code="500">If some error occurs</response>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post(UserProfile user)
         {
             try
             {
-                //var userId = User.Claims.FirstOrDefault(c => string.Equals(c.Type, "userId"));
-                //if (userId != null && string.Equals(userId.Value, user.UserId))
-                //{
                 bool added = await userService.AddUser(user);
                 return Created("api/user", added);
-                //}
-                //return Unauthorized($"Your credentials doesn't match User Profile");
             }
             catch (UserAlreadyExistsException ex)
             {
@@ -147,7 +140,6 @@ namespace UserService.Controllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(string userId)

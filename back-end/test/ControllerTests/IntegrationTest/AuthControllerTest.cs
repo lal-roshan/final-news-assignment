@@ -1,6 +1,7 @@
 ﻿using AuthenticationService;
 using AuthenticationService.Models;
 using Newtonsoft.Json;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
@@ -51,10 +52,58 @@ namespace Test.ControllerTests.IntegrationTest
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.True(stringResponse.Length > 0);
         }
+
+        [Fact, TestPriority(3)]
+        public async Task AuthenticateUserShouldReturnSuccess()
+        {
+            User user = new User { UserId = "John", Password = "password@123" };
+            MediaTypeFormatter formatter = new JsonMediaTypeFormatter();
+
+            // The endpoint or route of the controller action.
+            var httpResponse = await _client.PostAsync<User>("/api/auth/login", user, formatter);
+
+            // Deserialize and examine results.
+            var stringResponse = await httpResponse.Content.ReadAsStringAsync();
+            
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.True(stringResponse.Length > 0);
+
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer { JsonConvert.DeserializeObject<TokenModel>(stringResponse).Token}");
+            var authenticateResponse = await _client.GetAsync("/api/auth/isAuthenticated");
+            _client.DefaultRequestHeaders.Remove("Authorization");
+
+            var authenticateStringResponse = await authenticateResponse.Content.ReadAsStringAsync();
+
+            Assert.Equal(HttpStatusCode.OK, authenticateResponse.StatusCode);
+            Assert.True(Convert.ToBoolean(authenticateStringResponse));
+        }
         #endregion positivetests
 
         #region negativetests
-        [Fact, TestPriority(3)]
+        [Fact, TestPriority(4)]
+        public async Task AuthenticateUserShouldFail()
+        {
+            // The endpoint or route of the controller action.
+            var httpResponse = await _client.GetAsync("/api/auth/isAuthenticated");
+
+            // Deserialize and examine results.
+            var stringResponse = await httpResponse.Content.ReadAsStringAsync();
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+            // checking for requests without token in header
+            Assert.Equal($"Request header doesn't contain any token", stringResponse);
+
+            _client.DefaultRequestHeaders.Add("Authorization", "Bearer dummyTokenDataForTest");
+            var authenticateResponse = await _client.GetAsync("/api/auth/isAuthenticated");
+            _client.DefaultRequestHeaders.Remove("Authorization");
+
+            var authenticateStringResponse = await authenticateResponse.Content.ReadAsStringAsync();
+
+            Assert.Equal(HttpStatusCode.InternalServerError, authenticateResponse.StatusCode);
+            // checking for requests with invalid token in header
+            Assert.Equal($"User is not authenticated!!", authenticateStringResponse);
+        }
+
+        [Fact, TestPriority(5)]
         public async Task RegisterUserShouldFail()
         {
             User user = new User { UserId = "John", Password = "password@123" };
@@ -71,7 +120,7 @@ namespace Test.ControllerTests.IntegrationTest
             Assert.Equal($"This userId {user.UserId} already in use", stringResponse);
         }
 
-        [Fact, TestPriority(4)]
+        [Fact, TestPriority(6)]
         public async Task LoginUserShouldFail()
         {
             User user = new User { UserId = "John", Password = "admin123" };

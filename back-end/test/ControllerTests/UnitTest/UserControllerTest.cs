@@ -37,21 +37,21 @@ namespace Test.ControllerTests.UnitTest
         [Fact]
         public async Task GetShouldReturnOk()
         {
-            //string userId = "John";
-            //var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            //{
-            //    new Claim("userId", userId)
-            //}, "mock"));
+            string userId = "John";
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("userId", userId)
+            }, "mock"));
 
-            //UserProfile _user = new UserProfile { UserId = "John", FirstName = "Johnson", LastName = "dsouza", Contact = "7869543210", Email = "john@gmail.com", CreatedAt = DateTime.Now };
-            //var mockService = new Mock<IUserService>();
-            //mockService.Setup(svc => svc.GetUser(userId)).Returns(Task.FromResult(_user));
-            //var controller = new UserController(mockService.Object);
-            //controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = user } };
+            UserProfile _user = new UserProfile { UserId = "John", FirstName = "Johnson", LastName = "dsouza", Contact = "7869543210", Email = "john@gmail.com", CreatedAt = DateTime.Now };
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(svc => svc.GetUser(userId)).Returns(Task.FromResult(_user));
+            var controller = new UserController(mockService.Object);
+            controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = user } };
 
-            //var actual = await controller.Get();
-            //var actionResult = Assert.IsType<OkObjectResult>(actual);
-            //Assert.IsAssignableFrom<UserProfile>(actionResult.Value);
+            var actual = await controller.Get();
+            var actionResult = Assert.IsType<OkObjectResult>(actual);
+            Assert.IsAssignableFrom<UserProfile>(actionResult.Value);
         }
 
         [Fact]
@@ -94,21 +94,47 @@ namespace Test.ControllerTests.UnitTest
         }
 
         [Fact]
+        public async Task DeleteShouldReturnOk()
+        {
+            string userId = "Jack";
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(svc => svc.RemoveUser(userId)).Returns(Task.FromResult(true));
+            var controller = new UserController(mockService.Object);
+
+            var actual = await controller.Delete(userId);
+            var actionResult = Assert.IsType<OkObjectResult>(actual);
+            Assert.True(Convert.ToBoolean(actionResult.Value));
+        }
+
+        [Fact]
+        public async Task DeleteShouldReturnNotFound()
+        {
+            string userId = "John";
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(svc => svc.RemoveUser(userId)).Throws(new UserNotFoundException($"This user id doesn't exist"));
+            var controller = new UserController(mockService.Object);
+
+            var actual = await controller.Delete(userId);
+            var actionResult = Assert.IsType<NotFoundObjectResult>(actual);
+            Assert.Equal($"This user id doesn't exist", actionResult.Value);
+        }
+
+        [Fact]
         public async Task GetShouldReturnNotFound()
         {
-            //string userId = "Kevin";
-            //var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            //{
-            //    new Claim("userId", userId)
-            //}, "mock"));
-            //var mockService = new Mock<IUserService>();
-            //mockService.Setup(svc => svc.GetUser(userId)).Throws(new UserNotFoundException($"This user id doesn't exist"));
-            //var controller = new UserController(mockService.Object);
-            //controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = user } };
+            string userId = "Kevin";
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("userId", userId)
+            }, "mock"));
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(svc => svc.GetUser(userId)).Throws(new UserNotFoundException($"This user id doesn't exist"));
+            var controller = new UserController(mockService.Object);
+            controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = user } };
 
-            //var actual = await controller.Get();
-            //var actionResult = Assert.IsType<NotFoundObjectResult>(actual);
-            //Assert.Equal($"This user id doesn't exist", actionResult.Value);
+            var actual = await controller.Get();
+            var actionResult = Assert.IsType<NotFoundObjectResult>(actual);
+            Assert.Equal($"This user id doesn't exist", actionResult.Value);
         }
 
 

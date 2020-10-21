@@ -86,7 +86,7 @@ namespace UserService.Services
         public async Task<bool> RemoveUser(string userId)
         {
             var presentUser = await userRepository.GetUser(userId);
-            if(presentUser != null)
+            if (presentUser != null)
             {
                 return await userRepository.RemoveUser(userId);
             }

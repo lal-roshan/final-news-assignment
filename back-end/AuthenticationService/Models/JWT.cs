@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AuthenticationService.Models
+﻿namespace AuthenticationService.Models
 {
     /// <summary>
     /// Class representing the section having JWT details in config file
