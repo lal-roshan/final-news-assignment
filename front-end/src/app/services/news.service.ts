@@ -17,7 +17,7 @@ export class NewsService {
   trending_news_api_url: string = `https://newsapi.org/v2/top-headlines?country=in&apikey=${this.api_key}&page=1`;
 
   /// url for bookmarked news server
-  news_api_url: string = `http://localhost:59637/api/news/`;
+  news_api_url: string = `http://localhost:8084/api/news/`;
 
   bookmarks: Array<News> = [];
 

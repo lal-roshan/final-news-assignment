@@ -26,7 +26,6 @@ namespace NewsService
             services.AddSingleton(s => new NewsContext(Configuration));
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<INewsService, Services.NewsService>();
-            services.AddControllers();
 
             ///reading token payload related data from appsettings
             var tokenData = Configuration.GetSection("TokenData");
@@ -44,6 +43,8 @@ namespace NewsService
                     .AllowAnyMethod();
                 });
             });
+            // services.AddCors();
+            services.AddControllers();
         }
 
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +54,8 @@ namespace NewsService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors();
 
             app.UseRouting();
 
@@ -67,8 +70,6 @@ namespace NewsService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "News Api");
 
             });
-
-            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

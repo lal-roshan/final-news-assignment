@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using System;
+
 namespace UserService.Models
 {
     /// <summary>
@@ -23,10 +25,22 @@ namespace UserService.Models
         /// <param name="configuration"></param>
         public UserContext(IConfiguration configuration)
         {
-            ///Initialize client with connection string
-            mongoClient = new MongoClient(configuration.GetSection("MongoDB").GetSection("ConnectionString").Value);
-            ///Initialize database using database name
-            mongoDb = mongoClient.GetDatabase(configuration.GetSection("MongoDB").GetSection("UserDatabase").Value);
+            string client = Environment.GetEnvironmentVariable("MongoCon");
+            string db = Environment.GetEnvironmentVariable("Db");
+
+            if (client == null)
+            {
+                client = configuration.GetSection("MongoDB").GetSection("ConnectionString").Value;
+            }
+
+            if (db == null)
+            {
+                db = configuration.GetSection("MongoDB").GetSection("UserDatabase").Value;
+            }
+            //Initialize client with connection string
+            mongoClient = new MongoClient(client);
+            //Initialize database using database name
+            mongoDb = mongoClient.GetDatabase(db);
         }
 
         /// <summary>

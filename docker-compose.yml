@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+    angular-service:
+        image: angular-test-image
+        ports:
+        - "8087:80"
+
+    auth-service:
+        image: authentication-test-image
+        ports:
+        - "8083:80"
+        depends_on:
+        - sqldb
+        environment:
+            ConnectionString: "server=sqldb;database=AuthDb;User=sa;Password=pass@123;"
+
+    news-service:
+        image: news-test-image
+        ports:
+        - "8084:80"
+        depends_on:
+        - mongodb
+        environment:
+            MongoCon: "mongodb://mongodb:27017"
+            Db: "NewsTestDB"
+
+    user-service:
+        image: user-test-image
+        ports:
+        - "8086:80"
+        depends_on:
+        - mongodb
+        environment:
+            MongoCon: "mongodb://mongodb:27017"
+            Db: "UserTestDB1"
+
+    sqldb:
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        ports:
+        - "1433:1433"
+        environment:
+            SA_PASSWORD: "pass@123"
+            ACCEPT_EULA: "Y"
+
+    mongodb:
+        image: mongo:latest
+        ports:
+        - "27017:27017"

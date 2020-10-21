@@ -27,9 +27,14 @@ namespace AuthenticationService
         {
             ///register all dependencies here
             ///Implement token validation logic
-            services.AddControllers();
+            var constr = Environment.GetEnvironmentVariable("ConnectionString");
+            if (constr == null)
+            {
+                constr = Configuration.GetConnectionString("AuthDb");
+            }
+
             services.AddDbContext<AuthDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("AuthDb"))
+                options => options.UseSqlServer(constr)
             );
 
             services.AddScoped<IAuthRepository, AuthRepository>();
@@ -51,20 +56,17 @@ namespace AuthenticationService
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 swagger.IncludeXmlComments(xmlPath);
             });
-
-            //services.AddCors(c =>
-            //{
-            //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
-            //});
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
                 builder =>
                 {
                     builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
                     .AllowAnyHeader();
                 });
             });
+            services.AddControllers();
         }
 
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,8 +77,10 @@ namespace AuthenticationService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors();
 
             app.UseRouting();
+
             // Swagger Configuration in API  
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -84,7 +88,6 @@ namespace AuthenticationService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth Api");
 
             });
-            app.UseCors();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

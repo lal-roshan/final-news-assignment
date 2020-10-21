@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using System;
 
 namespace NewsService.Models
 {
@@ -24,10 +25,22 @@ namespace NewsService.Models
         /// <param name="configuration"></param>
         public NewsContext(IConfiguration configuration)
         {
-            ///Initialize client with connection string
-            mongoClient = new MongoClient(configuration.GetSection("MongoDB").GetSection("ConnectionString").Value);
-            ///Initialize database using database name
-            mongoDb = mongoClient.GetDatabase(configuration.GetSection("MongoDB").GetSection("NewsDatabase").Value);
+            string client = Environment.GetEnvironmentVariable("MongoCon");
+            string db = Environment.GetEnvironmentVariable("Db");
+
+            if (client == null)
+            {
+                client = configuration.GetSection("MongoDB").GetSection("ConnectionString").Value;
+            }
+
+            if (db == null)
+            {
+                db = configuration.GetSection("MongoDB").GetSection("NewsDatabase").Value;
+            }
+            //Initialize client with connection string
+            mongoClient = new MongoClient(client);
+            //Initialize database using database name
+            mongoDb = mongoClient.GetDatabase(db);
         }
 
         /// <summary>

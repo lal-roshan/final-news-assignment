@@ -7,10 +7,10 @@ import { forkJoin, Observable } from 'rxjs';
 })
 export class UserService {
 
-  userApiUrl = "http://localhost:59643/api/user/";
+  userApiUrl = "http://localhost:8086/api/user/";
 
   /// the url to authentication server
-  authenticationUrl = "http://localhost:55392/api/auth/";
+  authenticationUrl = "http://localhost:8083/api/auth/";
 
   constructor(private httpClient: HttpClient) { }
 

@@ -24,7 +24,6 @@ namespace UserService
             services.AddSingleton(s => new UserContext(Configuration));
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, Services.UserService>();
-            services.AddControllers();
 
             ///reading token payload related data from appsettings
             var tokenData = Configuration.GetSection("TokenData");
@@ -42,6 +41,8 @@ namespace UserService
                     .AllowAnyMethod();
                 });
             });
+            // services.AddCors();
+            services.AddControllers();
         }
 
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +52,9 @@ namespace UserService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
+            app.UseCors();
 
             app.UseRouting();
 
@@ -65,8 +69,6 @@ namespace UserService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "User Api");
 
             });
-
-            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {
