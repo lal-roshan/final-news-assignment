@@ -1,39 +1,21 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
+  /// The url for user server
   userApiUrl = "http://localhost:8086/api/user/";
 
   /// the url to authentication server
   authenticationUrl = "http://localhost:8083/api/auth/";
 
+  /// Injecting http client
   constructor(private httpClient: HttpClient) { }
 
-  // registerUser(userData){
-  //   console.log(userData["UserId"]);
-  //   let addUser =  this.httpClient.post(this.userApiUrl,{
-  //     UserId: userData["UserId"],
-  //     FirstName: userData["FirstName"],
-  //     LastName: userData["LastName"],
-  //     Email: userData["Email"],
-  //     CreatedAt: new Date()
-  //   });
-
-  //   let registerUser = this.httpClient.post(this.authenticationUrl + 'register',{
-  //     UserId: userData["UserId"],
-  //     Password: userData["Password"]
-  //   });
-
-  //   return forkJoin([addUser, registerUser]);
-  // }
-
+  /// Method for registering new user profile
   createUserProfile(userData){
-    console.log(userData);
     return this.httpClient.post(this.userApiUrl,{
       UserId: userData["UserId"],
       FirstName: userData["FirstName"],
@@ -43,6 +25,7 @@ export class UserService {
     });
   }
 
+  /// Method for registering new user credentials
   registerUserCredentials(userData){
     return this.httpClient.post(this.authenticationUrl + 'register',{
           UserId: userData["UserId"],
@@ -50,6 +33,7 @@ export class UserService {
     });
   }
 
+  /// Method for deleting an existing user profile details
   deleteUserProfile(userId:string){
     return this.httpClient.delete(this.userApiUrl, {
       params: new HttpParams().set('userId', userId)

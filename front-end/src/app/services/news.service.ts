@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { findIndex, tap } from 'rxjs/operators';
+import { findIndex, tap, map } from 'rxjs/operators';
 import { News } from '../models/news';
 import { AuthenticationService } from './authentication.service';
 
@@ -46,9 +46,8 @@ export class NewsService {
             console.log(response);
             newsItem.id = response;
             this.bookmarks.push(newsItem);
-            console.log("In add service:" + this.bookmarks.entries);
             this.bookmarksSubject.next(this.bookmarks);
-            console.log("In add service:" + this.bookmarksSubject.getValue().values);
+            // return newsItem;
           }
         }
       ));
@@ -68,7 +67,6 @@ export class NewsService {
           }
         );
     }
-    console.log("get service: " + this.bookmarksSubject.getValue().length);
     return this.bookmarksSubject;
   }
 
@@ -80,9 +78,7 @@ export class NewsService {
       .pipe(tap(
         (response) => {
           if (response) {
-            console.log("In delete service:" + response);
             var removeIndex = this.bookmarks.findIndex(item => item.id == newsId || item['newsId'] == newsId);
-            console.log("In delete service:" + removeIndex);
             if(removeIndex > -1){
               this.bookmarks.splice(removeIndex, 1);
               this.bookmarksSubject.next(this.bookmarks);

@@ -53,7 +53,8 @@ describe('NewsService', () => {
   beforeEach(()=>{
     httpMock = TestBed.get(HttpTestingController);
     newsService = TestBed.get(NewsService);
-    newsService.trending_news_api_url="http://localhost:3000/api/news"
+    newsService.trending_news_api_url="http://localhost:8084/api/news/"
+    newsService.news_api_url="http://localhost:8084/api/news/"
     mockResponse404 = {
       message: `Http failure response for ${newsService.trending_news_api_url} : 404 Not Found`,
       name: 'HttpErrorResponse',
@@ -102,18 +103,19 @@ describe('NewsService', () => {
     newsItem.publishedAt = "2019-12-11T06:57:50Z";
     newsItem.content = "Actor Shalini Pandey, who featured in the Telugu blockbuster Arjun Reddy, will make her Bollywood debut opposite Ranveer Singh in Jayeshbhai Jordaar. The film is produced by Yash Raj Films. \r\nSpeaking with Hindustan Times, Shalini said about her debut, “I’ve … [+1258 chars]";
     newsItem.id = 2;
+    let responseNewsId = 101;
  
 
     newsService.addNews(newsItem).subscribe(
       response=>{
-        expect(response).toEqual(newsItem)
+        expect(response).toBe(responseNewsId);
       },
       error=>{}
     );
-    const mockRequest = httpMock.expectOne(`http://localhost:3000/api/v1/news`)
-    expect(mockRequest.request.url).toEqual(`http://localhost:3000/api/v1/news`, 'requested url should match with server api url');
+    const mockRequest = httpMock.expectOne(`http://localhost:8084/api/news/`)
+    expect(mockRequest.request.url).toEqual(`http://localhost:8084/api/news/`, 'requested url should match with server api url');
     expect(mockRequest.request.method).toBe('POST', 'should handle requested method type.');
-    mockRequest.flush(newsItem);
+    mockRequest.flush(responseNewsId);
   })
 
   it('should handle 404 error from addNews() function',fakeAsync(()=>{
@@ -136,8 +138,8 @@ describe('NewsService', () => {
         expect(error.status).toBe(404,'should respond with status 404')
       }
     );
-    const mockRequest = httpMock.expectOne(`http://localhost:3000/api/v1/news`)
-    expect(mockRequest.request.url).toEqual(`http://localhost:3000/api/v1/news`, 'requested url should match with server api url');
+    const mockRequest = httpMock.expectOne(`http://localhost:8084/api/news/`)
+    expect(mockRequest.request.url).toEqual(`http://localhost:8084/api/news/`, 'requested url should match with server api url');
     expect(mockRequest.request.method).toBe('POST', 'should handle requested method type.');
     mockRequest.error(new ErrorEvent('Not Found'),{status:404})
     

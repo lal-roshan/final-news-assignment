@@ -53,6 +53,8 @@ export class LoginComponent {
         this.submitMessage = 'Username or Password is incorrect!!';
       } else if (error.status === 404){
         this.submitMessage = '404 Not Found';
+      } else if (error.status === 403){
+        this.submitMessage = 'Forbidden';
       } else{
         this.submitMessage = 'Some error occured. Please try again!!';
       }

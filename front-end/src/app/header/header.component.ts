@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { url } from 'inspector';
+import { AuthenticationService } from '../services/authentication.service';
+import { RouteService } from '../services/route.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +14,9 @@ export class HeaderComponent implements OnInit {
   /// Property holding the title name
   @Input() public title: string;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private authService: AuthenticationService,
+              private routeService: RouteService) {
     router.events.subscribe(val => {
       if (val instanceof NavigationStart && val.url != undefined) {
         if (val.url.indexOf('login') > -1 ||
@@ -65,6 +69,16 @@ export class HeaderComponent implements OnInit {
         navbarTogglerClasses.add('hide');
       }
     }
+  }
+
+  viewDashboard(){
+    this.authService.isUserAuthenticated(this.authService.getBearerToken())
+    .then(() => {
+      this.routeService.toDashboard();
+    })
+    .catch(() => {
+      this.routeService.toLogin();
+    })
   }
 
 }

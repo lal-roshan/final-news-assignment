@@ -1,10 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MatDialogModule } from '@angular/material/dialog';
 import { NewsReaderCardComponent } from '../src/app/news-reader-card/news-reader-card.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NewsService } from 'src/app/services/news.service';
 import { News } from 'src/app/models/news';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 describe('NewsReaderCardComponent', () => {
   let component: NewsReaderCardComponent;
@@ -12,10 +15,17 @@ describe('NewsReaderCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        MatDialogModule
+      ],
       declarations: [ NewsReaderCardComponent ],
       schemas:[NO_ERRORS_SCHEMA],
-      providers:[HttpTestingController]
+      providers:[
+        HttpTestingController,
+        NewsService,
+        AuthenticationService,
+      ]
     })
     .compileComponents();
   }));

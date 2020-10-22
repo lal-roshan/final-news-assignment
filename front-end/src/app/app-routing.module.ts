@@ -41,6 +41,11 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'home',
+    redirectTo: 'dashboard',
+    canActivate: [CanActivateGuard],
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

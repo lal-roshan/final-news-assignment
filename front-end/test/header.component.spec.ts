@@ -1,9 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterTestingModule } from '@angular/router/testing';
+
 import { HeaderComponent } from '../src/app/header/header.component';
 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { RouteService } from 'src/app/services/route.service';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 
 describe('HeaderComponent', () => {
@@ -12,7 +18,15 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule
+      ],
       declarations: [ HeaderComponent ],
+      providers: [
+        AuthenticationService,
+        RouteService
+      ],
       schemas:[NO_ERRORS_SCHEMA]
     })
     .compileComponents();

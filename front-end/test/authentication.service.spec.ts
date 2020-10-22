@@ -2,6 +2,7 @@ import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AuthenticationService } from '../src/app/services/authentication.service';
+import { Console } from 'console';
 
 const testConfig = {
   login: {
@@ -9,44 +10,44 @@ const testConfig = {
     password: 'password'
   },
   error404: {
-    message: 'Http failure response for http://localhost:3000/auth/v1: 404 Not Found',
+    message: 'Http failure response for http://localhost:8083/api/auth/login: 404 Not Found',
     name: 'HttpErrorResponse',
     ok: false,
     status : 404,
     statusText: 'Not Found',
-    url: 'http://localhost:3000/auth/v1'
+    url: 'http://localhost:8083/api/auth/login'
   },
   error403: {
     error: {message: 'Unauthorized'},
-    message: 'Http failure response for http://localhost:3000/auth/v1/: 403 Forbidden',
+    message: 'Http failure response for http://localhost:8083/api/auth/login: 403 Forbidden',
     name: 'HttpErrorResponse',
     ok: false,
     status: 403,
     statusText: 'Forbidden',
-    url: 'http://localhost:3000/auth/v1/'
+    url: 'http://localhost:8083/api/auth/login'
   },
   positive: {
     token: 'token123'
   },
-  requestURL: 'http://localhost:3000/auth/v1/',
+  loginRequestURL: 'http://localhost:8083/api/auth/login',
+  isAuthenticatedRequestURL: 'http://localhost:8083/api/auth/isAuthenticated',
   isAuth: {isAuthenticated: true},
-  isAuthURL: 'http://localhost:3000/auth/v1/isAuthenticated',
   authError404: {
-    message: 'Http failure response for http://localhost:3000/auth/v1/isAuthenticated: 404 Not Found',
+    message: 'Http failure response for http://localhost:8083/api/auth/isAuthenticated: 404 Not Found',
     name: 'HttpErrorResponse',
     ok: false,
     status : 404,
     statusText: 'Not Found',
-    url: 'http://localhost:3000/auth/v1'
+    url: 'http://localhost:8083/api/auth/isAuthenticated'
   },
   authError403: {
     error: {message: 'Unauthorized'},
-    message: 'Http failure response for http://localhost:3000/auth/v1/isAuthenticated: 403 Forbidden',
+    message: 'Http failure response for http://localhost:8083/api/auth/isAuthenticated: 403 Forbidden',
     name: 'HttpErrorResponse',
     ok: false,
     status: 403,
     statusText: 'Forbidden',
-    url: 'http://localhost:3000/auth/v1/isAuthenticated'
+    url: 'http://localhost:8083/api/auth/isAuthenticated'
   },
 };
 
@@ -83,7 +84,7 @@ describe('AuthenticationService', () => {
 
   // ------------ Positive testing of login user------------//
   it('should handle login user', fakeAsync(() => {
-    requestURL = testConfig.requestURL;
+    requestURL = testConfig.loginRequestURL;
     mockResponsePositive = testConfig.positive;
 
 
@@ -102,7 +103,7 @@ describe('AuthenticationService', () => {
 
   // ------------ Testing to handle 404 Error of login user------------//
   it('should handle 404 error if login url is not found', fakeAsync(() => {
-    requestURL = testConfig.requestURL;
+    requestURL = testConfig.loginRequestURL;
     mockResponseError = testConfig.error404;
 
 
@@ -123,7 +124,7 @@ describe('AuthenticationService', () => {
 
   // ------------ Testing to handle 403 Error of login user------------//
   it('should handle if username and password is wrong', fakeAsync(() => {
-    requestURL = testConfig.requestURL;
+    requestURL = testConfig.loginRequestURL;
     mockResponseError = testConfig.error403;
 
     authenticationService.authenticateUser(loginDetail).subscribe((res: any) => {
@@ -152,17 +153,17 @@ describe('AuthenticationService', () => {
 
   // ------------ Positive testing of isUserAuthenticated------------//
   it('should handle to know if user is aunthenticated', fakeAsync(() => {
-    requestURL = testConfig.isAuthURL;
+    requestURL = testConfig.isAuthenticatedRequestURL;
     mockResponsePositive = testConfig.isAuth;
 
     authenticationService.isUserAuthenticated(token).then((res: any) => {
     expect(res).toBeDefined();
-    expect(res).toBe(mockResponsePositive.isAuthenticated, 'should handle to check if isAuthenticated method is returns true');
+    expect(res).toBe(mockResponsePositive, 'should handle to check if isAuthenticated method is returns true');
     });
 
     const mockReq = httpMock.expectOne(requestURL);
     expect(mockReq.request.url).toEqual(requestURL, 'requested url should match with server api url');
-    expect(mockReq.request.method).toBe('POST', 'should handle requested method type.');
+    expect(mockReq.request.method).toBe('GET', 'should handle requested method type.');
     mockReq.flush(mockResponsePositive);
 
   }));
@@ -170,7 +171,7 @@ describe('AuthenticationService', () => {
 
   // ------------ Testing to handle 404 Error of IsUserAuthenticated ------------//
   it('should handle 404 error of isAuthenticated function', fakeAsync(() => {
-    requestURL = testConfig.isAuthURL;
+    requestURL = testConfig.isAuthenticatedRequestURL;
     mockResponseError = testConfig.authError404;
 
     authenticationService.isUserAuthenticated(token).then((res: any) => {
@@ -182,14 +183,14 @@ describe('AuthenticationService', () => {
 
     const mockReq = httpMock.expectOne(requestURL);
     expect(mockReq.request.url).toEqual(requestURL, 'requested url should match with server api url');
-    expect(mockReq.request.method).toBe('POST', 'should handle requested method type.');
+    expect(mockReq.request.method).toBe('GET', 'should handle requested method type.');
     mockReq.error(mockResponseError);
   }));
 
 
   // ------------ Testing to handle 403 Error of IsUserAuthenticated ------------//
   it('should handle 403 error of isAuthenticated funtion', fakeAsync(() => {
-    requestURL = testConfig.isAuthURL;
+    requestURL = testConfig.isAuthenticatedRequestURL;
     mockResponseError = testConfig.authError403;
 
     authenticationService.isUserAuthenticated(token).then((res: any) => {
@@ -201,7 +202,7 @@ describe('AuthenticationService', () => {
 
     const mockReq = httpMock.expectOne(requestURL);
     expect(mockReq.request.url).toEqual(requestURL, 'requested url should match with server api url');
-    expect(mockReq.request.method).toBe('POST', 'should handle requested method type.');
+    expect(mockReq.request.method).toBe('GET', 'should handle requested method type.');
     mockReq.error(mockResponseError);
   }));
 });

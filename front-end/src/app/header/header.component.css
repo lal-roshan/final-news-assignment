@@ -9,6 +9,10 @@
     height: 40px;
 }
 
+.navbar-brand{
+    cursor: pointer;
+}
+
 .vl{
     border-left: 2px solid black;
 }

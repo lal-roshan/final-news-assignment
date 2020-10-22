@@ -50,23 +50,29 @@ export class SignupComponent implements OnInit {
 
     this.userService.createUserProfile(userData)
       .subscribe((profileResponse) => {
-        console.log(profileResponse);
-        this.userService.registerUserCredentials(userData)
-          .subscribe((registerResponse) => {
-            console.log(registerResponse);
-            let toast = this.snackbar.open("Registration Successful. Redirecting to login...", "", {
-              duration: 1800,
-              verticalPosition: 'top'
+        if (profileResponse) {
+          this.userService.registerUserCredentials(userData)
+            .subscribe((registerResponse) => {
+              if (registerResponse) {
+                let toast = this.snackbar.open("Registration Successful. Redirecting to login...", "", {
+                  duration: 1800,
+                  verticalPosition: 'top'
+                });
+                toast.afterDismissed()
+                  .subscribe(() => {
+                    this.routeService.toLogin();
+                  });
+              }
+              else {
+                this.userService.deleteUserProfile(userData.UserId)
+                  .subscribe();
+              }
+            }, registerError => {
+              this.handleError(registerError);
+              this.userService.deleteUserProfile(userData.UserId)
+                .subscribe();
             });
-            toast.afterDismissed()
-              .subscribe(() => {
-                this.routeService.toLogin();
-              });
-          }, registerError => {
-            this.handleError(registerError);
-            this.userService.deleteUserProfile(userData.UserId)
-            .subscribe();
-          });
+        }
       }, profileError => {
         this.handleError(profileError);
       });
@@ -75,7 +81,7 @@ export class SignupComponent implements OnInit {
   /// Method for handling error while signup
   handleError(error) {
     if (error.status === 409) {
-      this.submitMessage = 'Username already exists. Please try with a different one.';
+      this.submitMessage = 'Username already exists. Please try again with a different one.';
     } else if (error.status === 404) {
       this.submitMessage = 'Not Found';
     } else {

@@ -14,21 +14,31 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const testConfig = {
   error404: {
-    message: 'Http failure response for http://localhost:3000/auth/v1: 404 Not Found',
+    error: {message: '404 Not Found'},
+    message: 'Http failure response for http://localhost:8083/api/auth/login: 404 Not Found',
     name: 'HttpErrorResponse',
     ok: false,
     status : 404,
     statusText: 'Not Found',
-    url: 'http://localhost:3000/auth/v1'
+    url: 'http://localhost:8083/api/auth/login'
   },
   error403: {
-    error: {message: 'Unauthorized'},
-    message: 'Http failure response for http://localhost:3000/auth/v1/: 403 Forbidden',
+    error: {message: 'Forbidden'},
+    message: 'Http failure response for http://localhost:8083/api/auth/login: 403 Forbidden',
     name: 'HttpErrorResponse',
     ok: false,
     status: 403,
     statusText: 'Forbidden',
-    url: 'http://localhost:3000/auth/v1/'
+    url: 'http://localhost:8083/api/auth/login'
+  },
+  error401: {
+    error: {message: 'Username or Password is incorrect!!'},
+    message: 'Http failure response for http://localhost:8083/api/auth/login: 401 Unauthorized',
+    name: 'HttpErrorResponse',
+    ok: false,
+    status: 401,
+    statusText: 'Unauthorized',
+    url: 'http://localhost:8083/api/auth/login'
   },
   positive: {
     token: 'token123'
@@ -96,7 +106,7 @@ describe('LoginComponent', () => {
   }));
 
   it('should handle wrong login and password', fakeAsync(() => {
-    errorMessage = testConfig.error403;
+    errorMessage = testConfig.error401;
     loginComponent.submitMessage = ' ';
     fixture.detectChanges();
     debugElement = fixture.debugElement.query(By.css('.error-message'));
@@ -139,7 +149,7 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     if (debugElement !== null) {
       element = debugElement.nativeElement;
-      expect(element.textContent).toBe(errorMessage.message,
+      expect(element.textContent).toBe(errorMessage.error.message,
         `should store 'err.message' in a varibale 'submitMessage' to show error on login page`);
     } else {
       expect(false).toBe(true,

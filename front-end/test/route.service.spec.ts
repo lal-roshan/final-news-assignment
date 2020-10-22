@@ -10,15 +10,17 @@ import { NewsReaderComponent } from 'src/app/news-reader/news-reader.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { SignupComponent } from 'src/app/signup/signup.component';
 
 describe('RouteService', () => { 
   let location: Location;
-  let routeService: any;
+  let routeService: RouteService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         LoginComponent,
+        SignupComponent,
         DashboardComponent,
         NewsStoriesComponent,
         NewsReaderComponent,
@@ -36,6 +38,13 @@ describe('RouteService', () => {
 
   it('should be created', inject([RouteService], (service: RouteService) => {
     expect(service).toBeTruthy();
+  }));
+
+  it('should handle to navigate signup view', fakeAsync(() => {
+    routeService.toSignup();
+    tick();
+    expect(location.path()).toContain('/signup',
+        `should navigate to signup view page`);
   }));
 
   it('should handle to navigate on news view', fakeAsync(() => {
