@@ -54,17 +54,15 @@ export class NewsService {
   /// Method for fetching all bookmarked news
   /// <returns> Returns the array of bookmarked news </return>
   getBookmarkedNews(): Observable<Array<News>> {
-    if (this.bookmarksSubject.getValue().length === 0) {
-      this.httpClient.get<Array<News>>(this.news_api_url, {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getBearerToken()}`)
-      })
-        .subscribe(
-          response => {
-            this.bookmarks = response;
-            this.bookmarksSubject.next(this.bookmarks);
-          }
-        );
-    }
+    this.httpClient.get<Array<News>>(this.news_api_url, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getBearerToken()}`)
+    })
+      .subscribe(
+        response => {
+          this.bookmarks = response;
+          this.bookmarksSubject.next(this.bookmarks);
+        }
+      );
     return this.bookmarksSubject;
   }
 

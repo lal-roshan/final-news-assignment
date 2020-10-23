@@ -1,13 +1,15 @@
 version: '3'
 
 services:
-    angular-service:
-        image: angular-test-image
+    angular-app:
+        build: ./front-end/
+        image: angular-app-image
         ports:
         - "8087:80"
 
     auth-service:
-        image: authentication-test-image
+        build: ./back-end/AuthenticationService/
+        image: authentication-service-image
         ports:
         - "8083:80"
         depends_on:
@@ -16,7 +18,8 @@ services:
             ConnectionString: "server=sqldb;database=AuthDb;User=sa;Password=pass@123;"
 
     news-service:
-        image: news-test-image
+        build: ./back-end/NewsService/
+        image: news-service-image
         ports:
         - "8084:80"
         depends_on:
@@ -26,7 +29,8 @@ services:
             Db: "NewsTestDB"
 
     user-service:
-        image: user-test-image
+        build: ./back-end/UserService/
+        image: user-service-image
         ports:
         - "8086:80"
         depends_on:
