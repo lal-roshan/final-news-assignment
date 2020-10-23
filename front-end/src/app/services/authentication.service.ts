@@ -12,29 +12,29 @@ export class AuthenticationService {
   constructor(private httpClient: HttpClient) { }
 
   /// Method for authenticating user based on the username and password provided in loginDetail
-  authenticateUser(loginDetail): Observable<Object>{
+  authenticateUser(loginDetail): Observable<Object> {
     console.log(loginDetail);
     return this.httpClient.post(this.authenticationUrl + 'login', loginDetail);
   }
 
   /// Method for setting the bearer token to localstorage
-  setBearerToken(token:string): void{
+  setBearerToken(token: string): void {
     localStorage.setItem('authToken', token);
   }
 
   /// Method for getting the bearer token from localstorage
-  getBearerToken(): string{
+  getBearerToken(): string {
     return localStorage.getItem('authToken');
   }
 
   /// Method for removing the bearer token from localstorage
-  removeBearerToken(): void{
+  removeBearerToken(): void {
     localStorage.removeItem('authToken');
   }
 
   /// Checks whether the user token is valid or not
-  isUserAuthenticated(token:string){
-    return this.httpClient.get(this.authenticationUrl + 'isAuthenticated',{
+  isUserAuthenticated(token: string) {
+    return this.httpClient.get(this.authenticationUrl + 'isAuthenticated', {
       headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
     }).toPromise();
   }

@@ -10,10 +10,10 @@ import { By } from '@angular/platform-browser';
 describe('NewsReaderComponent', () => {
   let component: NewsReaderComponent;
   let fixture: ComponentFixture<NewsReaderComponent>;
-  let newsService : NewsService;
-  
-  
-  let newsItems : Object =[
+  let newsService: NewsService;
+
+
+  let newsItems: Object = [
     {
       "author": "Times Of India",
       "title": "Mumbai terror attack mastermind Hafiz Saeed charged by Pakistani court with terror-financing - Times of India",
@@ -38,20 +38,20 @@ describe('NewsReaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports:[HttpClientTestingModule],
-      declarations: [ NewsReaderComponent ],
-      schemas:[NO_ERRORS_SCHEMA],
-      providers:[HttpTestingController,
-      {
-        provide:NewsService,
-        useClass:class NewsServiceStub{
-          getBookmarkedNews():Observable<Object>{
-            return of(newsItems)
+      imports: [HttpClientTestingModule],
+      declarations: [NewsReaderComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [HttpTestingController,
+        {
+          provide: NewsService,
+          useClass: class NewsServiceStub {
+            getBookmarkedNews(): Observable<Object> {
+              return of(newsItems)
+            }
           }
-        }
-      }]
+        }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -64,31 +64,31 @@ describe('NewsReaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain card component for displaying trending news',fakeAsync(()=>{
-    spyOn(newsService,'getBookmarkedNews').and.callThrough();
+  it('should contain card component for displaying trending news', fakeAsync(() => {
+    spyOn(newsService, 'getBookmarkedNews').and.callThrough();
     fixture.detectChanges();
-    
+
     let newsCard = fixture.debugElement.query(By.css('app-news-reader-card'));
     expect(newsCard).toBeTruthy();
   }))
 
-  it('should handle error 403 for unauthorized access',fakeAsync(()=>{
-    spyOn(newsService,'getBookmarkedNews').and.callThrough().and.returnValue(throwError({status:403,message:'Unauthorized Access !!!'}));
-  
+  it('should handle error 403 for unauthorized access', fakeAsync(() => {
+    spyOn(newsService, 'getBookmarkedNews').and.callThrough().and.returnValue(throwError({ status: 403, message: 'Unauthorized Access !!!' }));
+
     fixture.detectChanges();
     let newsCard = fixture.debugElement.query(By.css('app-news-reader-card'));
     expect(newsCard).toBeNull();
     expect(component.errorMessage.length).toBeGreaterThan(0);
     expect(component.errorMessage).toEqual('Unauthorized Access !!!')
   }))
-  
-  it('should handle error 404 when resource not found',fakeAsync(()=>{
-      spyOn(newsService,'getBookmarkedNews').and.callThrough().and.returnValue(throwError({status:404,message:'Unable to access news server to fetch news'}));
-    
-      fixture.detectChanges();
-      let newsCard = fixture.debugElement.query(By.css('app-news-reader-card'));
-      expect(newsCard).toBeNull();
-      expect(component.errorMessage.length).toBeGreaterThan(0);
-      expect(component.errorMessage).toEqual('Unable to access news server to fetch news')
-    }))
+
+  it('should handle error 404 when resource not found', fakeAsync(() => {
+    spyOn(newsService, 'getBookmarkedNews').and.callThrough().and.returnValue(throwError({ status: 404, message: 'Unable to access news server to fetch news' }));
+
+    fixture.detectChanges();
+    let newsCard = fixture.debugElement.query(By.css('app-news-reader-card'));
+    expect(newsCard).toBeNull();
+    expect(component.errorMessage.length).toBeGreaterThan(0);
+    expect(component.errorMessage).toEqual('Unable to access news server to fetch news')
+  }))
 });

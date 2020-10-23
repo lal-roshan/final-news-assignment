@@ -29,8 +29,8 @@ export class NewsStoryCardComponent implements OnInit {
   addNewsToReadLater(newsItem) {
     this.newsService.addNews(newsItem)
       .subscribe(response => {
-        console.log(response);
         if (response) {
+          /// If news was succesfully added a confirmation message is shown
           this.confirmationMessage = 'This News Article is Bookmarked';
         }
       },

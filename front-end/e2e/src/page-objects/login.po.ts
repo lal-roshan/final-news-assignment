@@ -9,7 +9,7 @@ export class LoginPage {
   getCurrentURL() {
     return browser.getCurrentUrl();
   }
- // navigate to  note view dashboard
+  // navigate to  note view dashboard
   navigateToDashboardView() {
     return browser.get('/dashboard');
   }
@@ -51,13 +51,13 @@ export class LoginPage {
     let inputPassword;
     inputUsername = this.getUserNameInputBox().getAttribute('value');
     inputPassword = this.getPasswordInputBox().getAttribute('value');
-    return Promise.all([inputUsername, inputPassword]).then( (values) => {
+    return Promise.all([inputUsername, inputPassword]).then((values) => {
       return values;
     });
   }
   // get username and password details
   getMockLoginDetail(): any {
-    const loginDetail: any = { username: 'stranger', password : 'password'};
+    const loginDetail: any = { username: 'stranger', password: 'password' };
     return loginDetail;
   }
   // set username and password input box values

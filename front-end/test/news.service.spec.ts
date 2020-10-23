@@ -8,11 +8,11 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 describe('NewsService', () => {
 
   let httpMock: HttpTestingController;
-  let newsService : NewsService;
+  let newsService: NewsService;
 
   let mockResponsePositive = [{
-    "status":"Ok",
-    "articles":[
+    "status": "Ok",
+    "articles": [
       {
         "author": "Murali Krishnan",
         "title": "Ex-SC judge may probe Telangana encounter that killed 4 rapists: Top court - Hindustan Times",
@@ -28,49 +28,49 @@ describe('NewsService', () => {
 
   let mockResponse404;
 
- 
-  beforeEach(()=>{
+
+  beforeEach(() => {
 
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
       ],
       providers: [NewsService,
-      {
-        provide:AuthenticationService,
-        useClass : class AuthenticationServiceStub{
-          getBearerToken():string{
-            return "token"
+        {
+          provide: AuthenticationService,
+          useClass: class AuthenticationServiceStub {
+            getBearerToken(): string {
+              return "token"
+            }
           }
-        }
-      }]
-    
+        }]
+
     })
 
-    
+
   })
 
-  beforeEach(()=>{
+  beforeEach(() => {
     httpMock = TestBed.get(HttpTestingController);
     newsService = TestBed.get(NewsService);
-    newsService.trending_news_api_url="http://localhost:8084/api/news/"
-    newsService.news_api_url="http://localhost:8084/api/news/"
+    newsService.trending_news_api_url = "http://localhost:8084/api/news/"
+    newsService.news_api_url = "http://localhost:8084/api/news/"
     mockResponse404 = {
       message: `Http failure response for ${newsService.trending_news_api_url} : 404 Not Found`,
       name: 'HttpErrorResponse',
       ok: false,
-      status : 404,
+      status: 404,
       statusText: 'Not Found',
       url: `${newsService.trending_news_api_url}`
-     };
+    };
   })
 
   it('should create an instance', () => {
     expect(newsService).toBeTruthy();
   });
 
-  it('should handle getTrendingNews() function',fakeAsync(()=>{
-    newsService.getTrendingNews().subscribe(response=>{
+  it('should handle getTrendingNews() function', fakeAsync(() => {
+    newsService.getTrendingNews().subscribe(response => {
       expect(response["articles"]).toEqual(mockResponsePositive["articles"])
     });
     const mockRequest = httpMock.expectOne(`${newsService.trending_news_api_url}`)
@@ -80,21 +80,21 @@ describe('NewsService', () => {
 
   }))
 
-  it('should handle 404 error from getTrendingNews() function',fakeAsync(()=>{
-    newsService.getTrendingNews().subscribe(response=>{ },
-    error=>{
-      console.log(error.message)
-      expect(error).toBeDefined('should throw error for resource not found')
-      expect(error.status).toBe(404,'should respond with status 404')
-    });
+  it('should handle 404 error from getTrendingNews() function', fakeAsync(() => {
+    newsService.getTrendingNews().subscribe(response => { },
+      error => {
+        console.log(error.message)
+        expect(error).toBeDefined('should throw error for resource not found')
+        expect(error.status).toBe(404, 'should respond with status 404')
+      });
     const mockRequest = httpMock.expectOne(`${newsService.trending_news_api_url}`)
     expect(mockRequest.request.url).toEqual(`${newsService.trending_news_api_url}`, 'requested url should match with server api url');
     expect(mockRequest.request.method).toBe('GET', 'should handle requested method type.');
-    mockRequest.error(new ErrorEvent('Not Found'),{status:404})
+    mockRequest.error(new ErrorEvent('Not Found'), { status: 404 })
   }))
 
-  it('should handle addNews() function with right parameter',()=>{
-    let newsItem : News = new News();
+  it('should handle addNews() function with right parameter', () => {
+    let newsItem: News = new News();
     newsItem.author = "Hindustan Times";
     newsItem.title = "Jayeshbhai Jordaar: Arjun Reddy actor Shalini Pandey to make Bollywood debut opposite Ranveer Singh - Hindustan Times";
     newsItem.description = "Shalini Pandey says she is ‘very fortunate to be sharing screen space with Ranveer Singh who is one of the biggest superstars of our generation’.";
@@ -104,13 +104,13 @@ describe('NewsService', () => {
     newsItem.content = "Actor Shalini Pandey, who featured in the Telugu blockbuster Arjun Reddy, will make her Bollywood debut opposite Ranveer Singh in Jayeshbhai Jordaar. The film is produced by Yash Raj Films. \r\nSpeaking with Hindustan Times, Shalini said about her debut, “I’ve … [+1258 chars]";
     newsItem.id = 2;
     let responseNewsId = 101;
- 
+
 
     newsService.addNews(newsItem).subscribe(
-      response=>{
+      response => {
         expect(response).toBe(responseNewsId);
       },
-      error=>{}
+      error => { }
     );
     const mockRequest = httpMock.expectOne(`http://localhost:8084/api/news/`)
     expect(mockRequest.request.url).toEqual(`http://localhost:8084/api/news/`, 'requested url should match with server api url');
@@ -118,8 +118,8 @@ describe('NewsService', () => {
     mockRequest.flush(responseNewsId);
   })
 
-  it('should handle 404 error from addNews() function',fakeAsync(()=>{
-    let newsItem : News = new News();
+  it('should handle 404 error from addNews() function', fakeAsync(() => {
+    let newsItem: News = new News();
     newsItem.author = "Hindustan Times";
     newsItem.title = "Jayeshbhai Jordaar: Arjun Reddy actor Shalini Pandey to make Bollywood debut opposite Ranveer Singh - Hindustan Times";
     newsItem.description = "Shalini Pandey says she is ‘very fortunate to be sharing screen space with Ranveer Singh who is one of the biggest superstars of our generation’.";
@@ -128,21 +128,58 @@ describe('NewsService', () => {
     newsItem.publishedAt = "2019-12-11T06:57:50Z";
     newsItem.content = "Actor Shalini Pandey, who featured in the Telugu blockbuster Arjun Reddy, will make her Bollywood debut opposite Ranveer Singh in Jayeshbhai Jordaar. The film is produced by Yash Raj Films. \r\nSpeaking with Hindustan Times, Shalini said about her debut, “I’ve … [+1258 chars]";
     newsItem.id = 2;
- 
+
 
     newsService.addNews(newsItem).subscribe(
-      response=>{},
-      error=>{
+      response => { },
+      error => {
         console.log(error.message)
         expect(error).toBeDefined('should throw error for resource not found')
-        expect(error.status).toBe(404,'should respond with status 404')
+        expect(error.status).toBe(404, 'should respond with status 404')
       }
     );
     const mockRequest = httpMock.expectOne(`http://localhost:8084/api/news/`)
     expect(mockRequest.request.url).toEqual(`http://localhost:8084/api/news/`, 'requested url should match with server api url');
     expect(mockRequest.request.method).toBe('POST', 'should handle requested method type.');
-    mockRequest.error(new ErrorEvent('Not Found'),{status:404})
-    
+    mockRequest.error(new ErrorEvent('Not Found'), { status: 404 })
+
+  }))
+
+  it('should handle deleteNews() function with right parameter', () => {
+    let newsId = 101;
+    let positiveResponse = {
+      success: true
+    };
+
+
+    newsService.deleteNews(newsId).subscribe(
+      response => {
+        expect(response).toBe(positiveResponse);
+      },
+      error => { }
+    );
+    const mockRequest = httpMock.expectOne(`http://localhost:8084/api/news/${newsId}`)
+    expect(mockRequest.request.url).toEqual(`http://localhost:8084/api/news/${newsId}`, 'requested url should match with server api url');
+    expect(mockRequest.request.method).toBe('DELETE', 'should handle requested method type.');
+    mockRequest.flush(positiveResponse);
+  })
+
+  it('should handle 404 error from deleteNews() function', fakeAsync(() => {
+    let newsId = 101;
+
+    newsService.deleteNews(newsId).subscribe(
+      response => { },
+      error => {
+        console.log(error.message)
+        expect(error).toBeDefined('should throw error for resource not found')
+        expect(error.status).toBe(404, 'should respond with status 404')
+      }
+    );
+    const mockRequest = httpMock.expectOne(`http://localhost:8084/api/news/${newsId}`)
+    expect(mockRequest.request.url).toEqual(`http://localhost:8084/api/news/${newsId}`, 'requested url should match with server api url');
+    expect(mockRequest.request.method).toBe('DELETE', 'should handle requested method type.');
+    mockRequest.error(new ErrorEvent('Not Found'), { status: 404 })
+
   }))
 
 });

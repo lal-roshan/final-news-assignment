@@ -29,7 +29,7 @@ import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confir
 import { AuthenticationService } from './services/authentication.service';
 import { RouteService } from './services/route.service';
 import { UserService } from './services/user.service';
- 
+
 
 
 @NgModule({
@@ -68,7 +68,7 @@ import { UserService } from './services/user.service';
     UserService
   ],
   bootstrap: [AppComponent],
-  entryComponents:[
+  entryComponents: [
     ConfirmationDialogComponent,
   ]
 })

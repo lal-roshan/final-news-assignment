@@ -1,6 +1,5 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Console } from 'console';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 
@@ -41,7 +40,7 @@ const testConfig = {
         statusText: 'Conflict',
         url: 'http://localhost:8083/api/auth/register'
     },
-    success:{
+    success: {
         value: true
     }
 };
@@ -54,7 +53,7 @@ describe('UserService', () => {
     let mockResponsePositive: any;
     let mockResponseError: any;
     let requestURL: any;
-    const userProfile: User =  new User();
+    const userProfile: User = new User();
     userProfile.UserId = 'testId';
     userProfile.FirstName = 'testFirstName';
     userProfile.LastName = 'testLastName';

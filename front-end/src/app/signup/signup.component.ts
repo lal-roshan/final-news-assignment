@@ -11,6 +11,8 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  /// Property for enabling and disabling form fields
+  disableForm: boolean = false;
   /// Form control for user name input
   username = new FormControl('', [Validators.required]);
 
@@ -29,6 +31,9 @@ export class SignupComponent implements OnInit {
   /// Property for storing messages on submit of form
   submitMessage = '';
 
+  /// Property for storing messages on successful signup
+  confirmationMessage = '';
+
   /// inject the dependencies required for authentication and routing
   constructor(private routeService: RouteService,
     private userService: UserService,
@@ -39,8 +44,11 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
   }
 
+  /// Method for registering new user data
   signupSubmit() {
+    this.disableForm = true;
     this.submitMessage = '';
+    this.confirmationMessage = '';
     let userData = new User();
     userData.UserId = this.username.value;
     userData.FirstName = this.firstname.value;
@@ -50,11 +58,14 @@ export class SignupComponent implements OnInit {
 
     this.userService.createUserProfile(userData)
       .subscribe((profileResponse) => {
+        /// If user profile was successfully created the credentials are registered next
         if (profileResponse) {
           this.userService.registerUserCredentials(userData)
             .subscribe((registerResponse) => {
+              /// If the registration of credentials was successful a toast message is shown and redirected to login
               if (registerResponse) {
-                let toast = this.snackbar.open("Registration Successful. Redirecting to login...", "", {
+                this.confirmationMessage = 'Registration Successful. Redirecting to login...';
+                let toast = this.snackbar.open(this.confirmationMessage, "", {
                   duration: 1800,
                   verticalPosition: 'top'
                 });
@@ -64,17 +75,22 @@ export class SignupComponent implements OnInit {
                   });
               }
               else {
+                /// If registering credentials failed user profile is deleted
                 this.userService.deleteUserProfile(userData.UserId)
                   .subscribe();
+                  this.disableForm = false;
               }
             }, registerError => {
+              /// If registering credentials failed user profile is deleted
               this.handleError(registerError);
               this.userService.deleteUserProfile(userData.UserId)
                 .subscribe();
-            });
+                this.disableForm = false;
+              });
         }
       }, profileError => {
         this.handleError(profileError);
+        this.disableForm = false;
       });
   }
 
@@ -83,7 +99,7 @@ export class SignupComponent implements OnInit {
     if (error.status === 409) {
       this.submitMessage = 'Username already exists. Please try again with a different one.';
     } else if (error.status === 404) {
-      this.submitMessage = 'Not Found';
+      this.submitMessage = '404 Not Found';
     } else {
       this.submitMessage = 'Some error occured. Please try again!!';
     }

@@ -1,3 +1,4 @@
+import { browser } from 'protractor';
 import { LoginPage } from './page-objects/login.po';
 
 describe('login page', () => {
@@ -10,13 +11,13 @@ describe('login page', () => {
   it('should get username input box', () => {
     page.navigateToLogin();
     expect(page.isUserNameInputBoxPresent())
-    .toBeTruthy(`<input class="username" matInput [formControl]='username'> should exist in login.component.html`);
+      .toBeTruthy(`<input class="username" matInput [formControl]='username'> should exist in login.component.html`);
   });
 
   it('should get passsword input box', () => {
     page.navigateToLogin();
     expect(page.isPasswordInputBoxPresent())
-    .toBeTruthy(`<input class="password" matInput type = 'password' [formControl]='password'>
+      .toBeTruthy(`<input class="password" matInput type = 'password' [formControl]='password'>
       should exist in login.component.html`);
   });
 
@@ -37,11 +38,13 @@ describe('login page', () => {
     let newNoteValues = page.addLoginValues();
     expect(page.getLoginInputBoxesDefaultValues()).toEqual(newNoteValues, 'Should be able to set values for username and password');
     page.clickSubmitButton();
+    browser.sleep(1800);
     page.navigateToDashboardView();
     page.getCurrentURL().then((url) => {
       if (url.indexOf('login') > -1) {
         newNoteValues = page.addLoginValues();
         page.clickSubmitButton();
+        browser.sleep(1800);
         page.navigateToDashboardView();
         expect(page.getCurrentURL()).toContain('newsstories', 'Should navigate to dashboard/newsstories');
       } else {

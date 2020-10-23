@@ -7,17 +7,17 @@ export class RouteService {
   constructor(private router: Router) { }
 
   // this method allows navigation to login component
-  toLogin(){
+  toLogin() {
     this.router.navigate(['login']);
   }
 
   // this method allows navigation to signup component
-  toSignup(){
+  toSignup() {
     this.router.navigate(['signup']);
   }
 
   // this method allows navigation to dashboard component
-  toDashboard(){
+  toDashboard() {
     this.router.navigate(['dashboard']);
   }
 }

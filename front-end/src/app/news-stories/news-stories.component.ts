@@ -31,12 +31,12 @@ export class NewsStoriesComponent implements OnInit {
         }
       },
         error => {
-          console.log(error.status+"....");
+          console.log(error.status + "....");
           if (error.status === 404) {
             this.errorMessage = 'Unable to access news server to fetch news';
-          } else if (error.status === 403){
+          } else if (error.status === 403) {
             this.errorMessage = 'Unauthorized Access !!!';
-          } else{
+          } else {
             this.errorMessage = 'Internal Server Error, Please Try Again Later';
           }
         });

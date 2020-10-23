@@ -21,13 +21,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [CanActivateGuard],
-    children:[
-      {
-        path: '',
-        redirectTo: 'newsstories',
-        canActivate: [CanActivateGuard],
-        pathMatch: 'full'
-      },
+    children: [
       {
         path: 'newsreader',
         component: NewsReaderComponent,
@@ -37,13 +31,13 @@ export const routes: Routes = [
         path: 'newsstories',
         component: NewsStoriesComponent,
         canActivate: [CanActivateGuard],
+      },
+      {
+        path: '',
+        redirectTo: 'newsstories',
+        pathMatch: 'full'
       }
     ]
-  },
-  {
-    path: 'home',
-    redirectTo: 'dashboard',
-    canActivate: [CanActivateGuard],
   },
   {
     path: '',

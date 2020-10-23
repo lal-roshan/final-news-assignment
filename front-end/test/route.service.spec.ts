@@ -2,7 +2,7 @@ import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { RouteService } from '../src/app/services/route.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Location } from '@angular/common';
-import {  routes } from '../src/app/app-routing.module';
+import { routes } from '../src/app/app-routing.module';
 import { LoginComponent } from 'src/app/login/login.component';
 import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
 import { NewsStoriesComponent } from 'src/app/news-stories/news-stories.component';
@@ -12,7 +12,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SignupComponent } from 'src/app/signup/signup.component';
 
-describe('RouteService', () => { 
+describe('RouteService', () => {
   let location: Location;
   let routeService: RouteService;
 
@@ -29,7 +29,7 @@ describe('RouteService', () => {
         RouterTestingModule.withRoutes(routes),
         HttpClientTestingModule
       ],
-      providers: [ HttpTestingController, RouteService,AuthenticationService ],
+      providers: [HttpTestingController, RouteService, AuthenticationService],
       schemas: [NO_ERRORS_SCHEMA]
     });
     location = TestBed.get(Location);
@@ -40,24 +40,24 @@ describe('RouteService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should handle to navigate signup view', fakeAsync(() => {
-    routeService.toSignup();
+  it('should handle to navigate login view', fakeAsync(() => {
+    routeService.toLogin();
     tick();
-    expect(location.path()).toContain('/signup',
-        `should navigate to signup view page`);
+    expect(location.path()).toContain('/login',
+      `should navigate to login page`);
   }));
 
   it('should handle to navigate on news view', fakeAsync(() => {
     routeService.toDashboard();
     tick();
     expect(location.path()).toContain('/dashboard',
-        `should navigate to news view page`);
+      `should navigate to news view page`);
   }));
 
-  it('should handle to navigate login view', fakeAsync(() => {
-    routeService.toLogin();
+  it('should handle to navigate signup view', fakeAsync(() => {
+    routeService.toSignup();
     tick();
-    expect(location.path()).toContain('/login',
-        `should navigate to login page`);
+    expect(location.path()).toContain('/signup',
+      `should navigate to signup view page`);
   }));
 });

@@ -24,6 +24,6 @@ export class NewsStoriesViewPage {
     return element.all(by.css('mat-card mat-card-actions button'))
   }
   getConfirmationMessageText() {
-    return element.all(by.css('mat-card small')).get(0).getText();
+    return element.all(by.css('.confirmation-message')).get(0).getText();
   }
 }

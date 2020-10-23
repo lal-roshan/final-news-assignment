@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
-import { url } from 'inspector';
-import { AuthenticationService } from '../services/authentication.service';
-import { RouteService } from '../services/route.service';
 
 @Component({
   selector: 'app-header',
@@ -14,14 +11,15 @@ export class HeaderComponent implements OnInit {
   /// Property holding the title name
   @Input() public title: string;
 
-  constructor(private router: Router,
-              private authService: AuthenticationService,
-              private routeService: RouteService) {
+  /// Injecting router for detecting url changes
+  constructor(private router: Router) {
+    /// Subscribe to change in routes for highlighting the proper menu icons
     router.events.subscribe(val => {
       if (val instanceof NavigationStart && val.url != undefined) {
+        /// If the url is of login or signup the menu items should not be visible
         if (val.url.indexOf('login') > -1 ||
-            val.url.indexOf('signup') > -1 ||
-            val.url == '/') {
+          val.url.indexOf('signup') > -1 ||
+          val.url == '/') {
           this.hideOrShowMenuItems(false);
           document.querySelectorAll(`li[data-route]`).forEach(item => {
             item.classList.remove('active');
@@ -37,10 +35,11 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
+  /// Method for highlighting the active menu item
   highlightActiveTab(url: string) {
     url.replace("/", "\/");
     let element = document.querySelector(`li[data-route="${url}"]`);
-    if(!element){
+    if (!element) {
       element = document.querySelector(`li[data-route-base="${url}"]`);
     }
     if (element) {
@@ -51,6 +50,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  /// Method for hiding or showing menu items
   hideOrShowMenuItems(value: boolean) {
     let toggleButtonClasses = document.getElementById('toggleButton').classList;
     let navbarTogglerClasses = document.getElementById('navbarToggler').classList;
@@ -70,15 +70,4 @@ export class HeaderComponent implements OnInit {
       }
     }
   }
-
-  viewDashboard(){
-    this.authService.isUserAuthenticated(this.authService.getBearerToken())
-    .then(() => {
-      this.routeService.toDashboard();
-    })
-    .catch(() => {
-      this.routeService.toLogin();
-    })
-  }
-
 }

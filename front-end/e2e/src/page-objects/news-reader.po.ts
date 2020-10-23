@@ -20,12 +20,16 @@ export class NewsReaderViewPage {
   getFavoriteIcon() {
     return element.all(by.css('mat-icon')).get(1)
   }
-  
-  getNewsItem(){
-    return element.all(by.css('.news-image'))
+
+  getNewsItem() {
+    return element.all(by.css('.news-image'));
   }
 
   getFaceIcon() {
     return element.all(by.css('mat-icon')).get(2)
+  }
+
+  getDeleteButton() {
+    return element.all(by.css('.delete-btn'));
   }
 }

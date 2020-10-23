@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { findIndex, tap, map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { News } from '../models/news';
 import { AuthenticationService } from './authentication.service';
 
@@ -43,11 +43,9 @@ export class NewsService {
       .pipe(tap(
         response => {
           if (!isNaN(response)) {
-            console.log(response);
             newsItem.id = response;
             this.bookmarks.push(newsItem);
             this.bookmarksSubject.next(this.bookmarks);
-            // return newsItem;
           }
         }
       ));
@@ -79,7 +77,7 @@ export class NewsService {
         (response) => {
           if (response) {
             var removeIndex = this.bookmarks.findIndex(item => item.id == newsId || item['newsId'] == newsId);
-            if(removeIndex > -1){
+            if (removeIndex > -1) {
               this.bookmarks.splice(removeIndex, 1);
               this.bookmarksSubject.next(this.bookmarks);
             }

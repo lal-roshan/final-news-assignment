@@ -1,7 +1,7 @@
 <div class="signup-c-form-wrapper px-5 pt-5 pb-3">
   <h3 class="mb-4">Sign Up</h3>
   <form class="">
-    <fieldset id="signupForm" class=" d-flex flex-column">
+    <fieldset id="signupForm" [disabled]="disableForm" class=" d-flex flex-column">
       <mat-form-field>
         <input matInput type="text" [formControl]="username" placeholder="Username" class="username">
       </mat-form-field>

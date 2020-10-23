@@ -15,8 +15,8 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   /// Method for registering new user profile
-  createUserProfile(userData){
-    return this.httpClient.post(this.userApiUrl,{
+  createUserProfile(userData) {
+    return this.httpClient.post(this.userApiUrl, {
       UserId: userData["UserId"],
       FirstName: userData["FirstName"],
       LastName: userData["LastName"],
@@ -26,15 +26,15 @@ export class UserService {
   }
 
   /// Method for registering new user credentials
-  registerUserCredentials(userData){
-    return this.httpClient.post(this.authenticationUrl + 'register',{
-          UserId: userData["UserId"],
-          Password: userData["Password"]
+  registerUserCredentials(userData) {
+    return this.httpClient.post(this.authenticationUrl + 'register', {
+      UserId: userData["UserId"],
+      Password: userData["Password"]
     });
   }
 
   /// Method for deleting an existing user profile details
-  deleteUserProfile(userId:string){
+  deleteUserProfile(userId: string) {
     return this.httpClient.delete(this.userApiUrl, {
       params: new HttpParams().set('userId', userId)
     });

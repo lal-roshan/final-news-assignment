@@ -1,5 +1,5 @@
 export class News {
-// declare properties for news item
+    // declare properties for news item
     id: number;
     author: string;
     title: string;
@@ -8,7 +8,7 @@ export class News {
     publishedAt: string;
     url: string;
     urlToImage: string;
-    source:{
-        name:string;
+    source: {
+        name: string;
     }
 }
